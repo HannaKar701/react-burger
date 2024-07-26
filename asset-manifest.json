@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/react-burger/static/css/main.305f27d5.css",
-    "main.js": "/react-burger/static/js/main.bb630b4b.js",
-    "static/media/burger-logo.svg": "/react-burger/static/media/burger-logo.0ac0e08caad7bdc50adf1e32f4229a54.svg",
+    "main.js": "/react-burger/static/js/main.e866085b.js",
+    "static/media/burger-logo.svg": "/react-burger/static/media/burger-logo.d58072f61c87cb0ae7e37413f0073374.svg",
     "index.html": "/react-burger/index.html",
     "main.305f27d5.css.map": "/react-burger/static/css/main.305f27d5.css.map",
-    "main.bb630b4b.js.map": "/react-burger/static/js/main.bb630b4b.js.map"
+    "main.e866085b.js.map": "/react-burger/static/js/main.e866085b.js.map"
   },
   "entrypoints": [
     "static/css/main.305f27d5.css",
-    "static/js/main.bb630b4b.js"
+    "static/js/main.e866085b.js"
   ]
 }
