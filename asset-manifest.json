@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/react-burger/static/css/main.305f27d5.css",
+    "main.js": "/react-burger/static/js/main.bb630b4b.js",
+    "static/media/burger-logo.svg": "/react-burger/static/media/burger-logo.0ac0e08caad7bdc50adf1e32f4229a54.svg",
+    "index.html": "/react-burger/index.html",
+    "main.305f27d5.css.map": "/react-burger/static/css/main.305f27d5.css.map",
+    "main.bb630b4b.js.map": "/react-burger/static/js/main.bb630b4b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.305f27d5.css",
+    "static/js/main.bb630b4b.js"
+  ]
+}
