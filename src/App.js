@@ -18,9 +18,9 @@ function App() {
                 <Header />
                 <div className="content">
                     <Routes>
-                        <Route path="/" element={<Home />} />
+                        <Route path="/react-burger/" element={<Home />} />
                         <Route path="*" element={<NotFound />} />
-                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/react-burger/cart" element={<Cart />} />
                     </Routes>
                 </div>
             </SearchContext.Provider>

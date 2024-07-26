@@ -307,7 +307,9 @@ export default function Cart() {
                         </span>
                     </div>
                     <div class="cart__bottom-buttons">
-                        <Link to="/" class="button button--outline button--add go-back-btn">
+                        <Link
+                            to="/react-burger/"
+                            class="button button--outline button--add go-back-btn">
                             <svg
                                 width="8"
                                 height="14"

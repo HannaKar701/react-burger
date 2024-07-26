@@ -1,6 +1,7 @@
 {
     "name": "react-burger",
     "version": "0.1.0",
+    "homepage": "https://hannakar701.github.io/react-burger/",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.11.4",
@@ -20,6 +21,8 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d build",
         "start": "NODE_ENV=production node_modules/react-scripts/bin/react-scripts.js start",
         "build": "react-scripts build",
         "test": "react-scripts test",
@@ -42,5 +45,8 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "gh-pages": "^6.1.1"
     }
 }
