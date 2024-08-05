@@ -8,17 +8,17 @@ import Skeleton from '../components/BurgerBlock/Skeleton';
 import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { setCategoryId, setSortType } from '../redux/slices/filterSlice';
 
 const Home = () => {
     const { searchValue } = useContext(SearchContext);
 
     const categoryId = useSelector((state) => state.filterReducer.categoryId);
+    const sortType = useSelector((state) => state.filterReducer.sortType);
     const dispatch = useDispatch();
 
     const [items, setItems] = useState([]);
     const [isLoading, setLoading] = useState(true);
-    const [sortType, setSortType] = useState({ name: 'популярности', sortProperty: 'rating' });
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
@@ -58,7 +58,7 @@ const Home = () => {
                     value={categoryId}
                     onClickCategory={(id) => dispatch(setCategoryId(id))}
                 />
-                <Sort value={sortType} onClickSort={(id) => setSortType(id)} />
+                <Sort value={sortType} onClickSort={(obj) => dispatch(setSortType(obj))} />
             </div>
             <h2 className="content__title">Каталог бургеров</h2>
             <div className="content__items">{isLoading ? skeletons : burgers}</div>

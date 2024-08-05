@@ -11,8 +11,8 @@ function Sort({ value, onClickSort }) {
     ];
     const [visiblePopUp, setVisiblePopUp] = useState(false);
 
-    const selectPopUpItem = (index) => {
-        onClickSort(index);
+    const selectPopUpItem = (obj) => {
+        onClickSort(obj);
         setVisiblePopUp(false);
     };
 
