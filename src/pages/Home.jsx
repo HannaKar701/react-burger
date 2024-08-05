@@ -7,14 +7,18 @@ import BurgerBlock from '../components/BurgerBlock/index';
 import Skeleton from '../components/BurgerBlock/Skeleton';
 import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCategoryId } from '../redux/slices/filterSlice';
 
 const Home = () => {
     const { searchValue } = useContext(SearchContext);
 
+    const categoryId = useSelector((state) => state.filterReducer.categoryId);
+    const dispatch = useDispatch();
+
     const [items, setItems] = useState([]);
     const [isLoading, setLoading] = useState(true);
     const [sortType, setSortType] = useState({ name: 'популярности', sortProperty: 'rating' });
-    const [categoryId, setCategoryId] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
@@ -50,7 +54,10 @@ const Home = () => {
     return (
         <div className="container">
             <div className="content__top">
-                <Categories value={categoryId} onClickCategory={(id) => setCategoryId(id)} />
+                <Categories
+                    value={categoryId}
+                    onClickCategory={(id) => dispatch(setCategoryId(id))}
+                />
                 <Sort value={sortType} onClickSort={(id) => setSortType(id)} />
             </div>
             <h2 className="content__title">Каталог бургеров</h2>
