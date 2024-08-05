@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
-function Sort({ value, onClickSort }) {
+import { setSortType } from '../redux/slices/filterSlice';
+
+function Sort() {
     const popUpList = [
         { name: 'популярности', sortProperty: 'rating' },
         { name: 'цене: по убыванию', sortProperty: 'price' },
@@ -11,8 +14,11 @@ function Sort({ value, onClickSort }) {
     ];
     const [visiblePopUp, setVisiblePopUp] = useState(false);
 
+    const sortType = useSelector((state) => state.filterReducer.sortType);
+    const dispatch = useDispatch();
+
     const selectPopUpItem = (obj) => {
-        onClickSort(obj);
+        dispatch(setSortType(obj));
         setVisiblePopUp(false);
     };
 
@@ -31,7 +37,7 @@ function Sort({ value, onClickSort }) {
                     />
                 </svg>
                 <b>Сортировка по:</b>
-                <span onClick={() => setVisiblePopUp(!visiblePopUp)}>{value.name}</span>
+                <span onClick={() => setVisiblePopUp(!visiblePopUp)}>{sortType.name}</span>
             </div>
             {visiblePopUp && (
                 <div className="sort__popup">
@@ -40,7 +46,9 @@ function Sort({ value, onClickSort }) {
                             <li
                                 key={uuidv4()}
                                 onClick={() => selectPopUpItem(obj)}
-                                className={value.sortProperty === obj.sortProperty ? 'active' : ''}>
+                                className={
+                                    sortType.sortProperty === obj.sortProperty ? 'active' : ''
+                                }>
                                 {obj.name}
                             </li>
                         ))}
