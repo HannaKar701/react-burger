@@ -13,8 +13,7 @@ import { setCategoryId } from '../redux/slices/filterSlice';
 const Home = () => {
     const { searchValue } = useContext(SearchContext);
 
-    const categoryId = useSelector((state) => state.filterReducer.categoryId);
-    const sortType = useSelector((state) => state.filterReducer.sortType);
+    const { categoryId, sortType } = useSelector((state) => state.filterReducer);
     const dispatch = useDispatch();
 
     const [items, setItems] = useState([]);
@@ -45,6 +44,7 @@ const Home = () => {
                 setLoading(false);
             })
             .catch((err) => console.log(err));
+
         window.scrollTo(0, 0);
     }, [categoryId, sortType.sortProperty, searchValue, currentPage]);
 
