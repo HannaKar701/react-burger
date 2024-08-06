@@ -8,17 +8,20 @@ import Skeleton from '../components/BurgerBlock/Skeleton';
 import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { setCategoryId, setPageCount } from '../redux/slices/filterSlice';
 
 const Home = () => {
     const { searchValue } = useContext(SearchContext);
 
-    const { categoryId, sortType } = useSelector((state) => state.filterReducer);
+    const { categoryId, sortType, pageCount } = useSelector((state) => state.filterReducer);
     const dispatch = useDispatch();
 
     const [items, setItems] = useState([]);
     const [isLoading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
+
+    const onChangePage = (num) => {
+        dispatch(setPageCount(num));
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -29,7 +32,7 @@ const Home = () => {
         const search = searchValue ? `&search=${searchValue}` : '';
 
         fetch(
-            `https://65fdb143b2a18489b3854828.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sort}&order=${order}${search}`,
+            `https://65fdb143b2a18489b3854828.mockapi.io/items?page=${pageCount}&limit=4&${category}&sortBy=${sort}&order=${order}${search}`,
         )
             .then((res) => {
                 if (!res.ok) {
@@ -46,7 +49,7 @@ const Home = () => {
             .catch((err) => console.log(err));
 
         window.scrollTo(0, 0);
-    }, [categoryId, sortType.sortProperty, searchValue, currentPage]);
+    }, [categoryId, sortType.sortProperty, searchValue, pageCount]);
 
     const burgers = items.map((burger) => <BurgerBlock key={uuidv4()} {...burger} />);
     const skeletons = [...new Array(6)].map(() => <Skeleton key={uuidv4()} />);
@@ -62,7 +65,7 @@ const Home = () => {
             </div>
             <h2 className="content__title">Каталог бургеров</h2>
             <div className="content__items">{isLoading ? skeletons : burgers}</div>
-            <Pagination page={currentPage} onChangePage={setCurrentPage} />
+            <Pagination page={pageCount} onChangePage={onChangePage} />
         </div>
     );
 };
