@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -14,6 +14,7 @@ export const popUpList = [
 
 function Sort() {
     const [visiblePopUp, setVisiblePopUp] = useState(false);
+    const sortRef = useRef();
 
     const sortType = useSelector((state) => state.filterReducer.sortType);
     const dispatch = useDispatch();
@@ -23,8 +24,16 @@ function Sort() {
         setVisiblePopUp(false);
     };
 
+    useEffect(() => {
+        document.body.addEventListener('click', (event) => {
+            if (!event.composedPath().includes(sortRef.current)) {
+                setVisiblePopUp(false);
+            }
+        });
+    }, []);
+
     return (
-        <div className="sort">
+        <div ref={sortRef} className="sort">
             <div className="sort__label">
                 <svg
                     width="10"

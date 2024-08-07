@@ -29,7 +29,6 @@ const Home = () => {
     };
 
     useEffect(() => {
-        console.log('use1', isSearch.current);
         if (window.location.search) {
             const params = qs.parse(window.location.search.slice(1));
             const sortType = popUpList.find((obj) => obj.sortProperty === params.sortProperty);
@@ -45,7 +44,6 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-        console.log('use2', isSearch.current);
         window.scrollTo(0, 0);
         setLoading(true);
 
@@ -76,7 +74,6 @@ const Home = () => {
     }, [categoryId, sortType.sortProperty, searchValue, pageCount]);
 
     useEffect(() => {
-        console.log('use3', isSearch.current);
         if (isMounted.current) {
             const queryString = qs.stringify({
                 sortProperty: sortType.sortProperty,
