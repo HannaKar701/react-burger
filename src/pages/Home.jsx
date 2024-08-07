@@ -1,21 +1,26 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
 import Categories from '../components/Categories';
-import Sort from '../components/Sort';
+import Sort, { popUpList } from '../components/Sort';
 import BurgerBlock from '../components/BurgerBlock/index';
 import Skeleton from '../components/BurgerBlock/Skeleton';
 import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCategoryId, setPageCount } from '../redux/slices/filterSlice';
+import { setCategoryId, setPageCount, setFilters } from '../redux/slices/filterSlice';
 
 const Home = () => {
-    const { searchValue } = useContext(SearchContext);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const isSearch = useRef(false);
+    const isMounted = useRef(false);
 
     const { categoryId, sortType, pageCount } = useSelector((state) => state.filterReducer);
-    const dispatch = useDispatch();
 
+    const { searchValue } = useContext(SearchContext);
     const [items, setItems] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
@@ -24,6 +29,24 @@ const Home = () => {
     };
 
     useEffect(() => {
+        console.log('use1', isSearch.current);
+        if (window.location.search) {
+            const params = qs.parse(window.location.search.slice(1));
+            const sortType = popUpList.find((obj) => obj.sortProperty === params.sortProperty);
+
+            dispatch(
+                setFilters({
+                    ...params,
+                    sortType,
+                }),
+            );
+            isSearch.current = true;
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log('use2', isSearch.current);
+        window.scrollTo(0, 0);
         setLoading(true);
 
         const category = categoryId > 0 ? `category=${categoryId}` : '';
@@ -31,25 +54,40 @@ const Home = () => {
         const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
         const search = searchValue ? `&search=${searchValue}` : '';
 
-        fetch(
-            `https://65fdb143b2a18489b3854828.mockapi.io/items?page=${pageCount}&limit=4&${category}&sortBy=${sort}&order=${order}${search}`,
-        )
-            .then((res) => {
-                if (!res.ok) {
-                    setItems([]);
+        if (!isSearch.current) {
+            fetch(
+                `https://65fdb143b2a18489b3854828.mockapi.io/items?page=${pageCount}&limit=4&${category}&sortBy=${sort}&order=${order}${search}`,
+            )
+                .then((res) => {
+                    if (!res.ok) {
+                        setItems([]);
+                        setLoading(false);
+                        throw new Error('Ошибка при запросе к API');
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    setItems(data);
                     setLoading(false);
-                    throw new Error('Ошибка при запросе к API');
-                }
-                return res.json();
-            })
-            .then((data) => {
-                setItems(data);
-                setLoading(false);
-            })
-            .catch((err) => console.log(err));
-
-        window.scrollTo(0, 0);
+                })
+                .catch((err) => console.log(err));
+        }
+        isSearch.current = false;
     }, [categoryId, sortType.sortProperty, searchValue, pageCount]);
+
+    useEffect(() => {
+        console.log('use3', isSearch.current);
+        if (isMounted.current) {
+            const queryString = qs.stringify({
+                sortProperty: sortType.sortProperty,
+                categoryId,
+                pageCount,
+            });
+
+            navigate(`?${queryString}`);
+        }
+        isMounted.current = true;
+    }, [categoryId, sortType.sortProperty, pageCount, navigate]);
 
     const burgers = items.map((burger) => <BurgerBlock key={uuidv4()} {...burger} />);
     const skeletons = [...new Array(6)].map(() => <Skeleton key={uuidv4()} />);

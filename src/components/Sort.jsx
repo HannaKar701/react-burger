@@ -4,14 +4,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { setSortType } from '../redux/slices/filterSlice';
 
+export const popUpList = [
+    { name: 'популярности', sortProperty: 'rating' },
+    { name: 'цене: по убыванию', sortProperty: 'price' },
+    { name: 'цене: по возрастанию', sortProperty: '-price' },
+    { name: 'алфавиту: по убыванию', sortProperty: 'title' },
+    { name: 'алфавиту: по возрастанию', sortProperty: '-title' },
+];
+
 function Sort() {
-    const popUpList = [
-        { name: 'популярности', sortProperty: 'rating' },
-        { name: 'цене: по убыванию', sortProperty: 'price' },
-        { name: 'цене: по возрастанию', sortProperty: '-price' },
-        { name: 'алфавиту: по убыванию', sortProperty: 'title' },
-        { name: 'алфавиту: по возрастанию', sortProperty: '-title' },
-    ];
     const [visiblePopUp, setVisiblePopUp] = useState(false);
 
     const sortType = useSelector((state) => state.filterReducer.sortType);
