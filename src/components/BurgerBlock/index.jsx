@@ -1,10 +1,28 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useSelector, useDispatch } from 'react-redux';
+import { addItem } from '../../redux/slices/cartSlice';
 
-function BurgerBlock({ title, description, price, imageUrl, sizes, types }) {
+const typeNames = ['цельнозерновая булочка', 'белая булочка'];
+
+function BurgerBlock({ id, title, description, price, imageUrl, sizes, types }) {
+    const dispatch = useDispatch();
+    const cartItem = useSelector((state) => state.cartReducer.items.find((obj) => obj.id === id));
     const [activeType, setActiveType] = useState(0);
     const [activeSize, setActiveSize] = useState(0);
-    const typeNames = ['цельнозерновая булочка', 'белая булочка'];
+    const addedCount = cartItem ? cartItem.count : 0;
+
+    const onClickAdd = () => {
+        const item = {
+            id,
+            title,
+            price,
+            imageUrl,
+            type: typeNames[activeType],
+            size: activeSize,
+        };
+        dispatch(addItem(item));
+    };
 
     return (
         <div className="burger-block">
@@ -35,7 +53,7 @@ function BurgerBlock({ title, description, price, imageUrl, sizes, types }) {
             </div>
             <div className="burger-block__bottom">
                 <div className="burger-block__price">от {price} ₽</div>
-                <button className="button button--outline button--add">
+                <button className="button button--outline button--add" onClick={onClickAdd}>
                     <svg
                         width="12"
                         height="12"
@@ -48,7 +66,7 @@ function BurgerBlock({ title, description, price, imageUrl, sizes, types }) {
                         />
                     </svg>
                     <span>Добавить</span>
-                    <i>0</i>
+                    <i>{addedCount}</i>
                 </button>
             </div>
         </div>
