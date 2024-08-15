@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import CartItem from '../components/CartItem';
 import { clearItems } from '../redux/slices/cartSlice';
+import BurgerEmpty from '../components/BurgerEmpty';
 
 export default function Cart() {
     const dispatch = useDispatch();
@@ -13,6 +14,10 @@ export default function Cart() {
     const onClickRemoveItems = () => {
         dispatch(clearItems());
     };
+
+    if (!totalCount) {
+        return <BurgerEmpty />;
+    }
 
     return (
         <div className="container container--cart">
