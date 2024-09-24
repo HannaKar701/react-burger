@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useEffect, useContext, useRef, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ import Pagination from '../components/Pagination';
 import { SearchContext } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryId, setPageCount, setFilters } from '../redux/slices/filterSlice';
+import { fetchItems } from '../redux/slices/burgerSlice';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -19,10 +20,9 @@ const Home = () => {
     const isMounted = useRef(false);
 
     const { categoryId, sortType, pageCount } = useSelector((state) => state.filterReducer);
+    const { items, status } = useSelector((state) => state.burgerReducer);
 
     const { searchValue } = useContext(SearchContext);
-    const [items, setItems] = useState([]);
-    const [isLoading, setLoading] = useState(true);
 
     const onChangePage = (num) => {
         dispatch(setPageCount(num));
@@ -43,35 +43,31 @@ const Home = () => {
         }
     }, []);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        setLoading(true);
-
+    const getBurgers = useCallback(async () => {
         const category = categoryId > 0 ? `category=${categoryId}` : '';
         const sort = sortType.sortProperty.replace('-', '');
         const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
         const search = searchValue ? `&search=${searchValue}` : '';
 
+        dispatch(
+            fetchItems({
+                category,
+                sort,
+                order,
+                search,
+                pageCount,
+            }),
+        );
+    }, [categoryId, sortType.sortProperty, searchValue, pageCount]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+
         if (!isSearch.current) {
-            fetch(
-                `https://65fdb143b2a18489b3854828.mockapi.io/items?page=${pageCount}&limit=4&${category}&sortBy=${sort}&order=${order}${search}`,
-            )
-                .then((res) => {
-                    if (!res.ok) {
-                        setItems([]);
-                        setLoading(false);
-                        throw new Error('Ошибка при запросе к API');
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    setItems(data);
-                    setLoading(false);
-                })
-                .catch((err) => console.log(err));
+            getBurgers();
         }
         isSearch.current = false;
-    }, [categoryId, sortType.sortProperty, searchValue, pageCount]);
+    }, [getBurgers]);
 
     useEffect(() => {
         if (isMounted.current) {
@@ -99,7 +95,14 @@ const Home = () => {
                 <Sort />
             </div>
             <h2 className="content__title">Каталог бургеров</h2>
-            <div className="content__items">{isLoading ? skeletons : burgers}</div>
+            {status === 'error' ? (
+                <div className="content__error-info">
+                    <h2>К сожалению, произошла ошибка!</h2>
+                    <p>Попробуйте обновить страницу или зайти позже.</p>
+                </div>
+            ) : (
+                <div className="content__items">{status === 'loading' ? skeletons : burgers}</div>
+            )}
             <Pagination page={pageCount} onChangePage={onChangePage} />
         </div>
     );

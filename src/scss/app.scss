@@ -19,6 +19,16 @@ body {
 .content {
     padding: 40px 0;
 
+    &__error-info {
+        display: grid;
+        place-items: center;
+        padding: 40px 0px;
+
+        h2 {
+            margin-bottom: 20px;
+        }
+    }
+
     &__title {
         margin: 35px 0;
         font-weight: 800;
