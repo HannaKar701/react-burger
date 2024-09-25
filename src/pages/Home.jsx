@@ -1,4 +1,4 @@
-import { useEffect, useContext, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,6 @@ import Sort, { popUpList } from '../components/Sort';
 import BurgerBlock from '../components/BurgerBlock/index';
 import Skeleton from '../components/BurgerBlock/Skeleton';
 import Pagination from '../components/Pagination';
-import { SearchContext } from '../App';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoryId, setPageCount, setFilters } from '../redux/slices/filterSlice';
 import { fetchItems } from '../redux/slices/burgerSlice';
@@ -22,7 +21,7 @@ const Home = () => {
     const { categoryId, sortType, pageCount } = useSelector((state) => state.filterReducer);
     const { items, status } = useSelector((state) => state.burgerReducer);
 
-    const { searchValue } = useContext(SearchContext);
+    const { searchValue } = useSelector((state) => state.filterReducer);
 
     const onChangePage = (num) => {
         dispatch(setPageCount(num));
