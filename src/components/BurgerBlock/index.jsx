@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useSelector, useDispatch } from 'react-redux';
-import { addItem } from '../../redux/slices/cartSlice';
+import { addItem, cartItemByIdSelector } from '../../redux/slices/cartSlice';
 
 const typeNames = ['цельнозерновая булочка', 'белая булочка'];
 
 function BurgerBlock({ id, title, description, price, imageUrl, sizes, types }) {
     const dispatch = useDispatch();
-    const cartItem = useSelector((state) => state.cartReducer.items.find((obj) => obj.id === id));
+
+    const cartItem = useSelector(cartItemByIdSelector(id));
     const [activeType, setActiveType] = useState(0);
     const [activeSize, setActiveSize] = useState(0);
     const addedCount = cartItem ? cartItem.count : 0;
