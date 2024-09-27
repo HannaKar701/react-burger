@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchItem } from '../redux/slices/burgerSlice';
-import { v4 as uuidv4 } from 'uuid';
 import { addItem, cartItemByIdSelector } from '../redux/slices/cartSlice';
 import { typeNames } from '../components/BurgerBlock';
 
@@ -46,7 +45,7 @@ function BurgerPage() {
                     <ul>
                         {types.map((typeId, index) => (
                             <li
-                                key={uuidv4()}
+                                key={index}
                                 onClick={() => setActiveType(typeId)}
                                 className={activeType === index ? 'active' : ''}>
                                 {typeNames[typeId]}
@@ -56,7 +55,7 @@ function BurgerPage() {
                     <ul>
                         {sizes.map((size, index) => (
                             <li
-                                key={uuidv4()}
+                                key={index}
                                 onClick={() => setActiveSize(index)}
                                 className={activeSize === index ? 'active' : ''}>
                                 {size}
