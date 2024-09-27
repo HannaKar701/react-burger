@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { addItem, cartItemByIdSelector } from '../../redux/slices/cartSlice';
 
-const typeNames = ['цельнозерновая булочка', 'белая булочка'];
+export const typeNames = ['цельнозерновая булочка', 'белая булочка'];
 
 function BurgerBlock({ id, title, description, price, imageUrl, sizes, types }) {
     const dispatch = useDispatch();
@@ -27,9 +28,11 @@ function BurgerBlock({ id, title, description, price, imageUrl, sizes, types }) 
 
     return (
         <div className="burger-block">
-            <img className="burger-block__image" src={imageUrl} alt="Burger" />
-            <h4 className="burger-block__title">{title}</h4>
-            <p className="burger-block__description">{description}</p>
+            <Link to={`/react-burger/burger/${id}`}>
+                <img className="burger-block__image" src={imageUrl} alt="Burger" />
+                <h4 className="burger-block__title">{title}</h4>
+                <p className="burger-block__description">{description}</p>
+            </Link>
             <div className="burger-block__selector">
                 <ul>
                     {types.map((typeId, index) => (
